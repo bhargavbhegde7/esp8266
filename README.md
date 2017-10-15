@@ -19,3 +19,5 @@ boot the ESP module with the below setup
 go to preferences of energia IDE and add this in "additional board manager URL"
 http://arduino.esp8266.com/stable/package_esp8266com_index.json
 
+Here is a cool tutorial
+https://diyhacking.com/esp8266-tutorial/
