@@ -15,3 +15,7 @@ boot the ESP module with the below setup
 |GPIO0  | LOW (GND)|
 |GPIO2 | can be set using the code |
 |RST | HIGH (3.3v) - make it low and back to high in order to reset the module|
+
+go to preferences of energia IDE and add this in "additional board manager URL"
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
+
