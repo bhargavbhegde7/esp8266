@@ -1,13 +1,13 @@
 #include <ESP8266WiFi.h>
  
-const char* ssid = "crackpot2";//type your ssid
-const char* password = "winteriscoming";//type your password
+const char* ssid = "halfbloodprince";//type your ssid
+const char* password = "sectumsempra";//type your password
  
-int ledPin = 2; // GPIO2 of ESP8266
+int ledPin = D5; // GPIO2 of ESP8266
 WiFiServer server(80);//Service Port
  
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(10);
  
   pinMode(ledPin, OUTPUT);
@@ -95,3 +95,4 @@ void loop() {
   Serial.println("Client disconnected");
   Serial.println("");
 }
+
