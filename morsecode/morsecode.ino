@@ -98,6 +98,8 @@ void setup() {
  
     Serial.begin(115200);
     WiFi.begin(ssid, password);  //Connect to the WiFi network
+
+    pinMode(ledPin, OUTPUT);
  
     while (WiFi.status() != WL_CONNECTED) {  //Wait for connection
  
@@ -109,26 +111,23 @@ void setup() {
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());  //Print the local IP
  
-    server.on("/morsecode", handleBody); //Associate the handler function to the path
+    server.on("/", handlePost); //Associate the handler function to the path
  
     server.begin(); //Start the server
     Serial.println("Server listening");
-
-    //define morse code map
- 
 }
  
-void loop() {
- 
+void loop() 
+{
     server.handleClient(); //Handling of incoming requests
- 
 }
  
-void handleBody() { //Handler for the body path
- 
+void handlePost() //Handler for post
+{ 
+
       if (server.hasArg("message")== false){ //Check if body received
  
-            server.send(200, "text/plain", "Message not found");
+            server.send(200, "text/plain", "send message via http post to this URL as form data. key - 'message'");
             return; 
       }
  
@@ -137,14 +136,15 @@ void handleBody() { //Handler for the body path
       Serial.println("\n");
       
       server.send(200, "text/plain", message);
-      
-      int lengthOfMessage = message.length();
-      for (int i = 0; i < lengthOfMessage; i++) 
+
+      for (int i = 0; i < message.length(); i++) 
       {
         String morseCodeForChar = getCodeForChar(String(message[i]));
         if(morseCodeForChar.length() > 0)
         {
           Serial.println(morseCodeForChar);
+          displayCode(morseCodeForChar);
+          delay(400);
         }
         else
         {
@@ -152,31 +152,6 @@ void handleBody() { //Handler for the body path
         }
       }
 }
-
-/*
-String getStringFromCharArray(char* charArray){
-  int lengthOfMessage = sizeof(charArray)/sizeof(char);
-  String newStr = "";
-  for(int i = 0; i<lengthOfMessage; i++){
-    newStr += charArray[i];
-  }
-  return newStr;
-}
-*/
-
-/*
-char* getMorseCodeForMessage(String message) {
-  int lengthOfMessage = message.length()+1;
-  char *morseCode = new char[lengthOfMessage];
-  for (int i = 0; i < lengthOfMessage; i++) {
-    morseCode[i] = getCodeForChar(message[i]);
-  }
-
-  morseCode[lengthOfMessage - 1] = NULL;
-
-  return morseCode;
-}
-*/
 
 String getCodeForChar(String c) 
 {
@@ -191,3 +166,36 @@ String getCodeForChar(String c)
   return "";
 }
 
+void displayCode(String morseCode)
+{
+  for(int i = 0; i<morseCode.length(); i++)
+  {
+    play(morseCode[i]);
+    delay(200);
+  }
+}
+
+void play(char c)
+{
+  if(c == '.')
+  {
+    turnOnFor(100);
+  }
+  else if (c == '-')
+  {
+    turnOnFor(500);
+  }
+  else if (c == '/')
+  {
+    delay(1000);
+  }
+  //Serial.println(String(c));
+}
+
+void turnOnFor(int milliseconds)
+{
+  digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(milliseconds);                       // wait for a second
+  digitalWrite(ledPin, LOW);
+  delay(100);
+}
